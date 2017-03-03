@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>The Book</title>
+    <link href="./node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="./node_modules/angular/angular.min.js"></script>
+    <script src="./node_modules/angular-cookies/angular-cookies.min.js"></script>
+    <script src="./app.js"></script>
+
+</head>
+
+<body ng-app="app" ng-controller="index_controller">
+
+    <div class="container">
+
+        <form class="form-horizontal" ng-if="!submited">
+            <fieldset>
+                <div id="legend" class="">
+                    <legend class="">日进度</legend> <span class="label label-warning">日报、周末、月报敬请期待...</span>
+                </div>
+
+
+                <div class="control-group">
+
+                    <label class="control-label">姓名</label>
+                    <div class="controls">
+                        <input ng-model="record.user" type="text" placeholder="姓名" class="input-xlarge">
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+
+                <div class="control-group">
+
+                    <label class="control-label">日期</label>
+                    <div class="controls">
+                        <input ng-model="record.recordDate" type="date" placeholder="日期" class="input-xlarge">
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+
+                <div class="control-group">
+
+                    <label class="control-label">读经内容</label>
+                    <div class="controls">
+                        <textarea ng-model="record.content" placeholder="内容" class="input-xlarge"></textarea>
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+
+                <div class="control-group">
+
+                    <label class="control-label">读经章数</label>
+                    <div class="controls">
+                        <input ng-model="record.chapters" type="number" placeholder="读经章数(整数)" class="input-xlarge" />
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+
+                    <label class="control-label">读经备注</label>
+                    <div class="controls">
+                        <textarea ng-model="record.remark" placeholder="读经备注" class="input-xlarge"></textarea>
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+
+
+                <div class="control-group">
+                    <label class="control-label"></label>
+
+                    <!-- Button -->
+                    <div class="controls">
+                        <button ng-click="submit()" class="btn btn-success">
+                            <span ng-show="submiting">提交中...</span>
+                            <span ng-show="!submiting">提交</span>
+                        </button>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+
+        <div class="alert alert-success" ng-if="submited">
+            提交成功
+        </div>
+        <button ng-if="submited" ng-click="unSubmit()" class="btn btn-default">返回,重新提交</button>
+    </div>
+
+</body>
+
+</html>

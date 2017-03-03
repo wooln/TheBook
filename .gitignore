@@ -1,0 +1,13 @@
+.idea
+node_modules
+npm-debug.log
+/.vs
+/bin
+/obj
+/packages
+*.user
+/*/.vs
+/*/bin
+/*/obj
+/*/packages
+dist
