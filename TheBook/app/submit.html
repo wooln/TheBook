@@ -1,0 +1,48 @@
+﻿<ul class="nav nav-tabs">
+    <li role="presentation" class="active"><a ui-sref="submit" ui-sref-active="active">每日填报</a></li>
+    <li role="presentation"><a ui-sref="weeklyReport" ui-sref-active="active">周报</a></li>
+</ul>
+
+<form class="form-horizontal">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">姓名</label>
+        <div class="col-sm-10">
+            <input ng-model="record.user" type="text" placeholder="姓名" class="form-control">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">日期</label>
+        <div class="col-sm-10">
+            <input ng-model="record.recordDate" type="date" placeholder="读经日期" class="form-control">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">内容</label>
+        <div class="col-sm-10">
+            <textarea ng-model="record.content" placeholder="读经内容" class="form-control"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">章数</label>
+        <div class="col-sm-10">
+            <input ng-model="record.chapters" type="number" placeholder="读经章数(整数)" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">备注</label>
+        <div class="col-sm-10">
+            <textarea ng-model="record.remark" placeholder="读经备注" class="form-control"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button ng-click="submit()" class="btn btn-success" ng-show="!submiting">
+                <span>提交</span>
+            </button>
+            <button class="btn btn-default" ng-show="submiting">
+                <span ng-show="submiting">提交中...</span>
+            </button>
+        </div>
+    </div>
+
+</form>

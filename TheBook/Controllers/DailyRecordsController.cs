@@ -1,34 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Description;
-using BibleApi.Models;
+using TheBook.Models;
 
-namespace BibleApi.Controllers
+namespace TheBook.Controllers
 {
     [Route("DailyRecords")]
     [AllowAnonymous]
     public class DailyRecordsController : ApiController
     {
         private BibleApiContext db = new BibleApiContext();
-        
-        [HttpGet]
-        public async Task<IHttpActionResult> Get(string user="")
-        {
-            DateTime dt = DateTime.Now.Date;
-            DailyRecord dailyRecord = db.DailyRecords.FirstOrDefault(p => p.User == user && p.RecordDate == dt);
-            if (dailyRecord == null)
-            {
-                return NotFound();
-            }
 
-            return Ok(dailyRecord);
+        [HttpGet]
+        public async Task<IHttpActionResult> Get(int weekOfficeSet)
+        {
+            Thread.Sleep(1000);
+
+            DateTime currentData = DateTime.Now.Date.AddDays(7 * weekOfficeSet);
+            
+            DateTimeOffset startSunday = currentData.AddDays(0 - (double)currentData.DayOfWeek);
+            DateTimeOffset nextSunday = startSunday.AddDays(7);
+
+            var recrods = db.DailyRecords.Where(r => startSunday <= r.RecordDate && r.RecordDate < nextSunday).ToArray();
+
+            WeekyReport report = this.GetReport(recrods, startSunday);
+
+            return Ok(report);
         }
 
         [HttpPost]
@@ -37,7 +38,7 @@ namespace BibleApi.Controllers
             dailyRecord.SubmitTime = DateTimeOffset.Now;
             dailyRecord.RecordDate = dailyRecord.RecordDate.Date;
             dailyRecord.User = dailyRecord.User.Trim();
-            
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -47,6 +48,39 @@ namespace BibleApi.Controllers
             return Ok("insert or updated");
         }
 
+        private WeekyReport GetReport(DailyRecord[] recrods, DateTimeOffset startSunday)
+        {
+            var groups = recrods.GroupBy(r => r.User).OrderBy(g=>g.Key).ToArray();
+            PersonWeekyReport[] report = groups.Select(g =>
+            {
+                PersonWeekyReport personReport = new PersonWeekyReport()
+                {
+                    User = g.Key,
+                    WeekRecord = new Dictionary<DayOfWeek, DailyRecord>()
+                };
+
+                foreach (DayOfWeek dayOfWeek in Enum.GetValues(typeof(DayOfWeek)))
+                {
+                    var daily = g.SingleOrDefault(r => r.RecordDate == startSunday.AddDays((int)dayOfWeek));
+                    personReport.WeekRecord[dayOfWeek] = daily;
+                    if (daily != null)
+                    {
+                        personReport.Count += daily.Chapters;
+                    }
+
+                }
+                return personReport;
+
+            }).OrderByDescending(r=>r.Count).ToArray();
+
+            return new WeekyReport()
+            {
+                DateSpan = startSunday.ToString("yyyy-MM-dd") + " ~ " + startSunday.AddDays(6).ToString("yyyy-MM-dd"),
+                Items = report
+            };
+        }
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -55,5 +89,6 @@ namespace BibleApi.Controllers
             }
             base.Dispose(disposing);
         }
+
     }
 }

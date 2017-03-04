@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Web;
+﻿using System.Data.Entity;
 
-namespace BibleApi.Models
+namespace TheBook.Models
 {
     public class BibleApiContext : DbContext
     {
@@ -19,6 +15,6 @@ namespace BibleApi.Models
         {
         }
 
-        public System.Data.Entity.DbSet<BibleApi.Models.DailyRecord> DailyRecords { get; set; }
+        public System.Data.Entity.DbSet<DailyRecord> DailyRecords { get; set; }
     }
 }

@@ -117,11 +117,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app.js" />
+    <Content Include="app\main.js" />
+    <Content Include="app\submit.html" />
+    <Content Include="app\submited.html" />
+    <Content Include="app\weekly-report.html" />
     <Content Include="default.htm" />
     <Content Include="Global.asax" />
     <Content Include="node_modules\angular-cookies\angular-cookies.js" />
     <Content Include="node_modules\angular-cookies\angular-cookies.min.js" />
+    <Content Include="node_modules\angular-ui-router\release\angular-ui-router.js" />
+    <Content Include="node_modules\angular-ui-router\release\angular-ui-router.min.js" />
     <Content Include="node_modules\angular\angular.js" />
     <Content Include="node_modules\angular\angular.min.js" />
     <Content Include="node_modules\angular\angular.min.js.map" />
@@ -140,6 +145,7 @@
     </Compile>
     <Compile Include="Models\BibleApiContext.cs" />
     <Compile Include="Models\DailyRecord.cs" />
+    <Compile Include="Models\PersonWeekyReport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
