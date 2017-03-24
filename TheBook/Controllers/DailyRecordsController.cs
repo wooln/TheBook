@@ -16,16 +16,14 @@ namespace TheBook.Controllers
         private BibleApiContext db = new BibleApiContext();
 
         [HttpGet]
-        public async Task<IHttpActionResult> Get(int weekOfficeSet)
+        public async Task<IHttpActionResult> Get(int weekOfficeSet, string group = "7")
         {
-            Thread.Sleep(1000);
-
             DateTime currentData = DateTime.Now.Date.AddDays(7 * weekOfficeSet);
-            
+
             DateTimeOffset startSunday = currentData.AddDays(0 - (double)currentData.DayOfWeek);
             DateTimeOffset nextSunday = startSunday.AddDays(7);
 
-            var recrods = db.DailyRecords.Where(r => startSunday <= r.RecordDate && r.RecordDate < nextSunday).ToArray();
+            var recrods = db.DailyRecords.Where(r => r.Group == group && startSunday <= r.RecordDate && r.RecordDate < nextSunday).ToArray();
 
             WeekyReport report = this.GetReport(recrods, startSunday);
 
@@ -35,6 +33,10 @@ namespace TheBook.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> Post(DailyRecord dailyRecord)
         {
+            if (dailyRecord.Group == null)
+            {
+                dailyRecord.Group = "7";
+            }
             dailyRecord.SubmitTime = DateTimeOffset.Now;
             dailyRecord.RecordDate = dailyRecord.RecordDate.Date;
             dailyRecord.User = dailyRecord.User.Trim();
@@ -50,7 +52,7 @@ namespace TheBook.Controllers
 
         private WeekyReport GetReport(DailyRecord[] recrods, DateTimeOffset startSunday)
         {
-            var groups = recrods.GroupBy(r => r.User).OrderBy(g=>g.Key).ToArray();
+            var groups = recrods.GroupBy(r => r.User).OrderBy(g => g.Key).ToArray();
             PersonWeekyReport[] report = groups.Select(g =>
             {
                 PersonWeekyReport personReport = new PersonWeekyReport()
@@ -71,7 +73,7 @@ namespace TheBook.Controllers
                 }
                 return personReport;
 
-            }).OrderByDescending(r=>r.Count).ToArray();
+            }).OrderByDescending(r => r.Count).ToArray();
 
             return new WeekyReport()
             {

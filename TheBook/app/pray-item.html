@@ -1,0 +1,21 @@
+﻿
+<div ng-include="'app/header.html'"></div>
+<button ng-click="add()" class="btn btn-primary">+添加</button>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>选择</th>
+            <th>#</th>
+            <th>姓名</th>
+            <th>事项</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="pray in userPrays">
+            <td><input type="checkbox" ng-model="item.selected" /></td>
+            <td><span>{{$index+1}}</span></td>
+            <td><input type="text" ng-model="pray.user" /></td>
+            <td><textarea ng-model="pray.item"></textarea></td>
+        </tr>
+    </tbody>
+</table>

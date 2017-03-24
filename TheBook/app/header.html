@@ -1,0 +1,14 @@
+﻿<nav class="navbar navbar-default navbar-fixed-top label label-info">
+    <div class="navbar-header">
+        <div class="navbar-brand" style="color: white">{{args.group}}组</div>
+    </div>
+</nav>
+<div style="margin-top: 60px;"></div>
+
+<ul class="nav nav-tabs">
+    <li role="presentation" ng-class="{'active': tab=='submit'}"><a ui-sref="submit(args)" ui-sref-active="active">每日填报</a></li>
+    <li role="presentation" ng-class="{active: tab=='weeklyReport'}"><a ui-sref="weeklyReport(args)" ui-sref-active="active">读经周报</a></li>
+    <li role="presentation" ng-class="{active: tab=='prayItem'}"><a ui-sref="prayItem(args)" ui-sref-active="active">祷告事项</a></li>
+
+</ul>
+

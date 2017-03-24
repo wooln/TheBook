@@ -6,10 +6,13 @@ namespace TheBook.Models
 {
     public class DailyRecord
     {
-        [Key, Column("User", Order = 0)]
+        [Key, Column("Group", Order = 0)]
+        public string Group { get; set; }
+
+        [Key, Column("User", Order = 1)]
         public string User { get; set; }
 
-        [Key, Column("RecordDate", Order = 1)]
+        [Key, Column("RecordDate", Order = 2)]
         public DateTimeOffset RecordDate { get; set; }
 
         [Column("SubmitTime")]
@@ -17,10 +20,10 @@ namespace TheBook.Models
 
         [Column("Content")]
         public string Content { get; set; }
-        
+
         [Column("Chapters")]
         public int Chapters { get; set; }
-        
+
         [Column("Remark")]
         public string Remark { get; set; }
 

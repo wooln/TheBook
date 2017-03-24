@@ -3,36 +3,56 @@ var app = angular.module("app", ['ngCookies', 'ui.router']);
 
 app.config(function ($urlRouterProvider, $stateProvider) {
 
-    $urlRouterProvider.otherwise('/submit');
+    $urlRouterProvider.otherwise('/submit/7');
 
     var submitState = {
         name: 'submit',
-        url: '/submit',
+        url: '/submit/:group',
         controller: 'submit_controller',
         templateUrl: 'app/submit.html'
     };
 
     var submitedState = {
         name: 'submited',
-        url: '/submited',
+        url: '/submited/:group',
+        controller: 'submited_controller',
         templateUrl: 'app/submited.html'
     };
 
     var weeklyReportState = {
         name: 'weeklyReport',
-        url: '/weeklyReport',
+        url: '/weeklyReport/:group',
         controller: 'weekly_report_controller',
         templateUrl: 'app/weekly-report.html'
+    };
+
+    var prayItemState = {
+        name: 'prayItem',
+        url: '/prayItem/:group',
+        controller: 'pray_item_controller',
+        templateUrl: 'app/pray-item.html'
     };
 
     $stateProvider.state(submitState);
     $stateProvider.state(submitedState);
     $stateProvider.state(weeklyReportState);
+    $stateProvider.state(prayItemState);
 });
 
-app.controller("submit_controller", function ($scope, $cookieStore, $http, $state) {
+
+app.controller("submited_controller",
+    function ($scope, $stateParams) {
+        $scope.args = $stateParams;
+        $scope.tab = 'submited';
+    });
+
+app.controller("submit_controller", function ($scope, $cookieStore, $http, $state, $stateParams) {
+    $scope.args = $stateParams;
+    $scope.tab = 'submit';
+    var group = $scope.args.group;
 
     $scope.record = {
+        group: group,
         user: $cookieStore.get('myname'),
         recordDate: new Date(),
         content: '',
@@ -64,7 +84,7 @@ app.controller("submit_controller", function ($scope, $cookieStore, $http, $stat
         $http.post('DailyRecords', $scope.record)
             .then(
                 function (response) {
-                    $state.go('submited');
+                    $state.go('submited', $scope.args);
                 },
                 function (response) {
                     $scope.submiting = false;
@@ -79,7 +99,11 @@ app.controller("submit_controller", function ($scope, $cookieStore, $http, $stat
 });
 
 app.controller("weekly_report_controller",
-    function ($scope, $cookieStore, $http, $state) {
+    function ($scope, $cookieStore, $http, $state, $stateParams) {
+
+        $scope.args = $stateParams;
+        $scope.tab = 'weeklyReport';
+        var group = $stateParams.group;
 
         $scope.dayDic = {
             'sunday': '日',
@@ -98,6 +122,7 @@ app.controller("weekly_report_controller",
 
             var prarams = {
                 weekOfficeSet: $scope.oficeSet,
+                group: group,
                 r: (new Date()).getTime()
             };
 
@@ -180,5 +205,18 @@ app.controller("weekly_report_controller",
                         row.expandDayKey = null;
                     }
                 });
+        };
+    });
+
+
+app.controller("pray_item_controller",
+    function ($scope, $stateParams) {
+        $scope.args = $stateParams;
+        $scope.tab = 'prayItem';
+
+        $scope.userPrays = [];
+
+        $scope.add = function () {
+            $scope.userPrays.push({});
         };
     });
